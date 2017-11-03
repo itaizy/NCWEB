@@ -370,13 +370,15 @@ body {
 .p-ellipisis {
     width: 90%;
     text-overflow: ellipsis;
-    overflow: hidden;
+    /*overflow: hidden;*/
     white-space: nowrap;
+    word-wrap:break-word;
 }
 .ellipisis {
-    text-overflow: ellipsis;
-    overflow: hidden;
+    /*text-overflow: ellipsis;*/
+    /*overflow: hidden;*/
     white-space: nowrap;
+    word-wrap:break-word;
 }
 .service-work {
     position: relative;
@@ -768,7 +770,7 @@ body {
 }
 .question-detail .question-box {
     position: relative;
-    height: 70px;
+    height: 130px;
     padding: 6px 25px 6px 18px;
     margin-top: 12px;
 }

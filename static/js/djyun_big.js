@@ -461,7 +461,7 @@ var setInt; //工作流程图有关时间的setInterval对象
     // 更新工作流流程图
     function updateWorkflow(moment) {
         var tpl =
-            '<p class="questions ellipisis">问题：{{message}}</p> \
+            '<p class="questions">{{message}}</p> \
             <div class="start_box box_align box_pack"> \
                 <p class="font16">{{createdtstr}}</p> \
                 <div class="font16 start_box box-pack"><p>等级：</p><p class="hot-font font14">{{hotstr}}</p></div> \
