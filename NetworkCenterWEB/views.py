@@ -5,6 +5,12 @@ import sys
 import json
 import random
 import time
+import requests
+from datetime import datetime
+from datetime import timedelta
+
+
+
 from django.core import serializers
 
 from django.core.paginator import Paginator
@@ -307,21 +313,30 @@ def getHotEventsFromEventsTJ(request):
         ]
     }
 
-    sentiment2res = {1: 'positive', 2:'negative', 3:'neutral'}
-    resByKeyTime = {}
-    sqlres = _my_execuse_query_sql(SQLsentiment);
-    for onesqlres in sqlres:
-        if onesqlres[0] not in resByKeyTime:
-            resByKeyTime[onesqlres[0]] = {sentiment2res[int(onesqlres[1])]: onesqlres[2], "time": onesqlres[0] * 1000}
-        else:
-            resByKeyTime[onesqlres[0]][sentiment2res[int(onesqlres[1])]] = onesqlres[2]
-    resByKeyTime = sorted(resByKeyTime.items(), key=lambda item:item[0])
-    result = []
-    for k,v in resByKeyTime:
-        result.append(v)
+    today = time.strftime('%Y-%m-%d',time.localtime(time.time()))
+    oneMonthAgo = (str(datetime.now() - timedelta(20)))[:10]
+    print(today)
+    print(oneMonthAgo)
+    url = "http://ring.act.buaa.edu.cn/api/minotor/histEsTableByTimeAndWords"
+    para = {"from":oneMonthAgo, "to":today, "tableName":"crawler_all","field":"releasedate", "interval":"day", "words":"北航+北京航空航天大学"}
+    header ={}
+    r = requests.get(url,params=para,headers= header)
+    r_json = r.json()
+    print(r_json)
+    maxv = 0;
+    res = [];
+    for k in sorted(r_json.keys()):
+        tmpTime = time.strptime(k[:19], "%Y-%m-%dT%H:%M:%S")
+        keyListOne = int(time.mktime(tmpTime))
+        valueListOne = r_json[k]
+        if maxv < valueListOne:
+            maxv = valueListOne
+        res.append({"negative":0,"neutral":valueListOne,"positive":0,"time":keyListOne*1000})
+    maxv = maxv + maxv/20;
 
-    #print(result)
-    json_msg = {'result' : result, 'maxValue':5}
+    print(res)
+    print(maxv)
+    json_msg = {'result': res, 'maxValue':maxv}
 
     return json_response(json_msg)
     # json_msg = {
