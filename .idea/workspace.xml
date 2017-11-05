@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c6edbd66-3ca3-4a90-8c0d-6af25abb6d54" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/NetworkCenterWEB/settings.py" afterPath="$PROJECT_DIR$/NetworkCenterWEB/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/NetworkCenterWEB/views.py" afterPath="$PROJECT_DIR$/NetworkCenterWEB/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/js/djyun_big.js" afterPath="$PROJECT_DIR$/static/js/djyun_big.js" />
-    </list>
+    <list default="true" id="c6edbd66-3ca3-4a90-8c0d-6af25abb6d54" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -932,12 +927,12 @@
       <workItem from="1509610614032" duration="2693000" />
       <workItem from="1509676270579" duration="2503000" />
       <workItem from="1509689786953" duration="679000" />
-      <workItem from="1509884208765" duration="2326000" />
+      <workItem from="1509884208765" duration="2850000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="132603000" />
+    <option name="totallyTimeSpent" value="133127000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
