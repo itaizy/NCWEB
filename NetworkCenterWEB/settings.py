@@ -94,29 +94,29 @@ WSGI_APPLICATION = 'NetworkCenterWEB.wsgi.application'
 #     }
 # }
 # NC197
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'ihome',
-#         'USER': 'ring4ihome',
-#         'PASSWORD': 'zxcasdqwe123!@#',
-#         'HOST': '10.254.20.198',
-#         'PORT': '3306',
-#     }
-# }
-
-
-# MySQL local
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ihome',
-        'USER': 'ihome',
-        'PASSWORD': '123456789',
-        'HOST': '192.168.99.207',
+        'USER': 'ring4ihome',
+        'PASSWORD': 'zxcasdqwe123!@#',
+        'HOST': '10.254.20.198',
         'PORT': '3306',
     }
 }
+
+
+# MySQL local
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ihome',
+#         'USER': 'ihome',
+#         'PASSWORD': '123456789',
+#         'HOST': '192.168.99.207',
+#         'PORT': '3306',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
