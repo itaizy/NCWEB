@@ -419,7 +419,7 @@ def getYuqingEmo(resquest):
         ]
     }
 
-    sentiment2res = {1: 'positive', 2:'negative', 3:'neutral'}
+    sentiment2res = {1: 'negative', 2:'neutral', 3:'positive'}
     resByKeyTime = {}
     sqlres = _my_execuse_query_sql(SQLsentiment);
     for onesqlres in sqlres:

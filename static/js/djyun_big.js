@@ -1342,7 +1342,7 @@ var setInt; //工作流程图有关时间的setInterval对象
             ],
             series : [
                 {
-                    name: '负面',
+                    name: '高兴',
                     type: 'line',
                     smooth: true,
                     // symbol: 'circle',
@@ -1376,7 +1376,7 @@ var setInt; //工作流程图有关时间的setInterval对象
                     data: neg
                 },
                 {
-                    name: '正面',
+                    name: '生气',
                     type: 'line',
                     smooth: true,
                     // symbol: 'circle',
@@ -1408,7 +1408,7 @@ var setInt; //工作流程图有关时间的setInterval对象
                     data: pos
                 },
                 {
-                    name: '中性',
+                    name: '悲伤',
                     type: 'line',
                     lineStyle: {
                         normal: {
@@ -1424,7 +1424,7 @@ var setInt; //工作流程图有关时间的setInterval对象
                         }
                     },
                     data: influence
-                }
+                }·
             ]
         });
         return chart;
