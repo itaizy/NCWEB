@@ -53,7 +53,7 @@ def _update_two_week():
 #SQLMap = 'SELECT B.sourcearea FROM ihome_complain A, ihome_baseprofile B WHERE A.UID = B.UID and A.addtime > ' + str(intTimeNowBeforeOneWeek)
 SQLMap = 'SELECT B.sourcearea FROM ihome_complain A, ihome_baseprofile B WHERE A.UID = B.UID'
 SQLstat = 'SELECT atdepartment, count(*) as num from ihome_complain where addtime > ' + str(intTimeNowBeforeOneWeek) + ' group by atdepartment order by num desc limit 10;'
-SQLtrend = 'SELECT id, (replytime - addtime) as kk from ihome_complain where replytime > addtime and addtime > ' + str(intTimeNowBeforeOneWeek) + ' order by kk desc;'
+SQLtrend = 'SELECT id, (replytime - addtime) as kk, addtime from ihome_complain where addtime > ' + str(intTimeNowBeforeOneWeek) + ' order by kk desc;'
 SQLsentiment = 'SELECT * from (select end as time, sentiment, count from moodlens_realtime order by end desc limit 45) aa order by time;'
 SQLactive = 'select dateline,ip,replynum from ihome_doing where dateline > ' + str(intTimeNowBeforeO2Week);
 
@@ -200,13 +200,18 @@ def getPlotMomentTrendData(request):
 
     #print(alllocal)
     for onelocal in alllocal:
-
-
-        if int(onelocal[1]) < 60*60*24*7:
+        tmp = int(onelocal[1])
+        if tmp < 0:
+            tmp = int(time.time()) - int(onelocal[2])
+        if tmp < 60*60*24*7:
             i = 1
-            while i < 7 and int(onelocal[1]) < datainterval[i - 1]:
+            while i < 8:
+                if tmp < datainterval[i - 1]:
+                    datay[i - 1] = datay[i - 1] + 1
+                    break
                 i = i + 1
-            datay[i - 1] = datay[i - 1] + 1
+        else:
+            datay[6] = datay[6] + 1
 
 
     #print(localnum)
