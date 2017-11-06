@@ -3595,3 +3595,15 @@ class IhomeuserVars(models.Model):
         managed = False
         db_table = 'ihomeuser_vars'
 
+class MoodlensRealtime(models.Model):
+    end = models.IntegerField(primary_key=True)
+    duration = models.IntegerField()
+    sentiment = models.IntegerField()
+    count = models.IntegerField()
+    keywords = models.TextField()
+    weibos = models.TextField()
+
+    class Meta:
+        managed = False
+        db_table = 'moodlens_realtime'
+        unique_together = (('end', 'duration', 'sentiment'),)

@@ -9,7 +9,7 @@ import requests
 from datetime import datetime
 from datetime import timedelta
 
-
+from django.db.models import Q
 
 from django.core import serializers
 
@@ -27,6 +27,7 @@ from common.utils import json_response
 from django.db.models import Count
 from NetworkCenterWEB.models import IhomeComplain
 from NetworkCenterWEB.models import IhomeDoing
+from NetworkCenterWEB.models import MoodlensRealtime
 
 
 #from common.utils import json_response
@@ -41,6 +42,13 @@ intPeriod2 = 30;
 
 intTimeNowBeforeOneWeek = int(time.time()) - intPeriod*60*60*24;
 intTimeNowBeforeO2Week = int(time.time()) - intPeriod2*60*60*24;
+
+def _update_one_week():
+    intTimeNowBeforeOneWeek = int(time.time()) - intPeriod*60*60*24;
+
+def _update_two_week():
+    intTimeNowBeforeO2Week = int(time.time()) - intPeriod2*60*60*24;
+
 
 #SQLMap = 'SELECT B.sourcearea FROM ihome_complain A, ihome_baseprofile B WHERE A.UID = B.UID and A.addtime > ' + str(intTimeNowBeforeOneWeek)
 SQLMap = 'SELECT B.sourcearea FROM ihome_complain A, ihome_baseprofile B WHERE A.UID = B.UID'
@@ -70,6 +78,14 @@ def ncbig(request):
     :return:
     '''
     return render_to_response('big.html')
+
+def detail(request):
+    '''
+    默认html
+    :param request:
+    :return:
+    '''
+    return render_to_response('detail.html')
 
 def _deleteAt(str):
     str = str.replace('&nbsp;','')
@@ -147,6 +163,7 @@ def getPlotMomentStatData(request):
 
     #print(SQLstat)
 
+    _update_one_week();
     alllocal = _my_execuse_query_sql(SQLstat)
 
     datay = []
@@ -174,6 +191,7 @@ def getPlotMomentStatData(request):
 
 def getPlotMomentTrendData(request):
 
+    _update_one_week();
     alllocal = _my_execuse_query_sql(SQLtrend)
 
     datainterval = [60*60*1, 60*60*3, 60*60*6, 60*60*12, 60*60*24, 60*60*24*3, 60*60*24*7]
@@ -216,6 +234,9 @@ def getActiveAndCommentDegree(request):
     d_x = set()
     d_y1 = {}
     d_y2 = {}
+
+    _update_two_week();
+
     alllocal = _my_execuse_query_sql(SQLactive)
     #print(alllocal)
     for onelocal in alllocal:
@@ -290,6 +311,37 @@ def getNewsData(request):
     #         {"eventId":"bftjyw033309531","imgurl":"/static/images/hotnewslogo.png","emotion":"1","src":"微博","eventLoc":"青海省","relativity":45,"description":" 可可西里申遗成功 入选世界自然遗产名录(组图) ","eventType":"13","time":"2017-07-08T07:41:00","hot":1772,"url":"http://news.enorth.com.cn/system/2017/07/08/033309531.shtml"}
     #     ]
     # }
+    return json_response(json_msg)
+
+def getIhomeEmoSource(request):
+
+    startTime = int(time.time()) - 9*(24*60*60)
+    emoclass = request.GET.get('emoclass');
+
+    # querydata = MoodlensRealtime.objects.filter(end__gt=startTime).filter(sentiment=int(emoclass)).values("end", "weibos").order_by('-end')
+    querydata = MoodlensRealtime.objects.filter(~Q(weibos= '')).filter(sentiment=int(emoclass)).values("end", "weibos").order_by('-end')[0:9]
+
+    print(len(querydata))
+    print(querydata)
+
+    #print('********************************************')
+    res_list = []
+    for one in querydata:
+        if '</a>' in one['weibos']:
+            #        print('~~~~~~~~~~~~~~~' + one['message'])
+            one['description'] = _deleteAt(one['weibos'])
+            del one['weibos']
+        else:
+            one['description'] = one['weibos']
+            del one['weibos']
+        one['imgurl'] = "/static/images/emoicon" + emoclass + ".png"
+        one['src'] = 'ihome'
+        one['time'] = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(one['end']))
+        one['eventLoc'] = '北航'
+        res_list.append(one)
+
+    json_msg = {'result' : res_list}
+
     return json_response(json_msg)
 
 def getHotEventsFromEventsTJ(request):

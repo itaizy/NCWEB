@@ -24,9 +24,11 @@ urlpatterns = [
     url(r'^getPlotMomentTrendData', views.getPlotMomentTrendData, name='getPlotMomentTrendData'),
     url(r'^getActiveAndCommentDegree', views.getActiveAndCommentDegree, name='getActiveAndCommentDegree'),
     url(r'^getNewsData', views.getNewsData, name='getNewsData'),
+    url(r'^getIhomeEmoSource', views.getIhomeEmoSource, name='getIhomeEmoSource'),
     url(r'^getHotEventsFromEventsTJ', views.getHotEventsFromEventsTJ, name='getHotEventsFromEventsTJ'),
     url(r'^getYuqingEmo', views.getYuqingEmo, name='getYuqingEmo'),
     url(r'^getthreeindexs', views.getthreeindexs, name='getthreeindexs'),
     url(r'^getmapdata', views.getmapdata, name='getmapdata'),
     url(r'^$', views.ncbig),
+    url(r'^detail', views.detail),
 ]
