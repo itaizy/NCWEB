@@ -1261,7 +1261,7 @@ var setInt; //工作流程图有关时间的setInterval对象
                     color: '#fff',
                     fontSize: 12
                 },
-                data:['正面','负面','中性']
+                data:['高兴','生气','悲伤']
             },
             tooltip : {
                 trigger: 'axis',
