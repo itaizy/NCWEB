@@ -490,7 +490,7 @@ def getYuqingEmo(resquest):
     return json_response(json_msg)
 
 def getthreeindexs(request):
-
+    _update_one_week();
     all = IhomeComplain.objects.filter(addtime__gt=intTimeNowBeforeOneWeek).count()
     inprocess = IhomeComplain.objects.filter(replytime=0, addtime__gt=intTimeNowBeforeOneWeek).count()
     json_msg = {'all' : all, 'inprocess':inprocess, 'done':all - inprocess}
