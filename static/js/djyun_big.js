@@ -1424,7 +1424,7 @@ var setInt; //工作流程图有关时间的setInterval对象
                         }
                     },
                     data: influence
-                }·
+                }
             ]
         });
         return chart;
