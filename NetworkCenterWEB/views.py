@@ -324,7 +324,7 @@ def getIhomeEmoSource(request):
     emoclass = request.GET.get('emoclass');
 
     # querydata = MoodlensRealtime.objects.filter(end__gt=startTime).filter(sentiment=int(emoclass)).values("end", "weibos").order_by('-end')
-    querydata = MoodlensRealtime.objects.filter(~Q(weibos= '')).filter(sentiment=int(emoclass)).values("end", "weibos").order_by('-end')[0:9]
+    querydata = MoodlensRealtime.objects.filter(~Q(weibos= '')).filter(sentiment=int(emoclass)).values("end", "weibos").order_by('-end')[0:10]
 
     print(len(querydata))
     print(querydata)

@@ -451,7 +451,7 @@ body {
     margin-right: 8px;
 }
 .service-work .service-ul .item .w338 {
-    width: 338px;
+    width: 500px;
 }
 @media (max-width: 767px) {
     .service-work .service-ul .item .w338 {
@@ -590,7 +590,7 @@ body {
 .view-core .content-top .title {
     height: 20px;
     line-height: 20px;
-    max-width: 60%;
+    max-width: 70%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
