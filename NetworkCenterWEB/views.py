@@ -341,7 +341,7 @@ def getIhomeEmoSource(request):
             del one['weibos']
         one['imgurl'] = "/static/images/emoicon" + emoclass + ".png"
         one['src'] = 'ihome'
-        one['time'] = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(one['end']))
+        one['time'] = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(one['end'] - 8*60*60))
         one['eventLoc'] = '北航'
         res_list.append(one)
 
