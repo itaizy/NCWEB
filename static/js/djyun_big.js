@@ -1278,9 +1278,9 @@ var setInt; //工作流程图有关时间的setInterval对象
                 extraCssText: 'max-width: 230px; background:rgba(17, 47, 117, 0.8); border:1px solid #0775e4',
                 formatter: '2017-{b}<br> \
                     <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#1e98ff"> \
-                    </span>{a0} : {c0}%<br> \
+                    </span>{a0} : {c0}<br> \
                     <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#FF5421"> \
-                    </span>{a1} : {c1}%<br> \
+                    </span>{a1} : {c1}<br> \
                     <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#FFC11E"> \
                     </span>{a2} : {c2}</div>',
             },
