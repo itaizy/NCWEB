@@ -51,47 +51,65 @@ var setInt; //工作流程图有关时间的setInterval对象
     // 为民
     var momentDetailMap = {};
     plotMomentTab();
-    $.getJSON('/getPlotMomentStatData', {size: 10}, function (data) {
-        statChart = plotMomentStat(data.result);
-    });
-    $.getJSON('/getPlotMomentTrendData', {span: 12}, function (data) {
-        trendChart = plotMomentTrend(data.result);
-    });
+    function requestEfficiency(){
+        $.getJSON('/getPlotMomentStatData', {size: 10}, function (data) {
+            statChart = plotMomentStat(data.result);
+        });
+        $.getJSON('/getPlotMomentTrendData', {span: 12}, function (data) {
+            trendChart = plotMomentTrend(data.result);
+        });
+    }
+    requestEfficiency();
+    setInterval(requestEfficiency, 60*60*1000);
     function requestHotMoment() {
         $.getJSON('/getHotMomentsFromGrid', {areaName: "", type: -1, size: 30}, function (data) {
             plotMomentYujing(data.result);
         });
     }
     requestHotMoment();
-     setInterval(requestHotMoment, 60000);
+    setInterval(requestHotMoment, 60000);
 
     // 舆情
     innerOuterViewTab();
-    $.getJSON('/getNewsData', {
-        size: 4,
-        imgurl: true,
-        sort: 'hot',
-        type: 8, // type=8: magic for TJController.java, line 481, commented by @ht, 2017-04-08
-    }, function (data) {
-        innerOuterViewList("ul#inner-view-list", data.result, false);
-    });
-    $.getJSON('/getNewsData', {
-        size: 4,
-        imgurl: true,
-        sort: 'hot',
-        type: 1, // type=8: magic for TJController.java, line 481, commented by @ht, 2017-04-08
-    }, function (data) {
-        innerOuterViewList("ul#outer-view-list", data.result, true);
-    });
-    $.getJSON('/getHotEventsFromEventsTJ', {
-        areaName: "",
-        size: "8000",
-    }, function (data) {
-        hotChart = plotHotEvents(data.result, data.maxValue);
-    });
-    $.getJSON('/getYuqingEmo', {loc: ""}, function (data) {
-        emotionChart = plotEventEmotion(data.result);
-    });
+    function YuqingByHour(){
+        $.getJSON('/getNewsData', {
+            size: 4,
+            imgurl: true,
+            sort: 'hot',
+            type: 8, // type=8: magic for TJController.java, line 481, commented by @ht, 2017-04-08
+        }, function (data) {
+            innerOuterViewList("ul#inner-view-list", data.result, false);
+        });
+        $.getJSON('/getNewsData', {
+            size: 4,
+            imgurl: true,
+            sort: 'hot',
+            type: 1, // type=8: magic for TJController.java, line 481, commented by @ht, 2017-04-08
+        }, function (data) {
+            innerOuterViewList("ul#outer-view-list", data.result, true);
+        });
+        $.getJSON('/getYuqingEmo', {loc: ""}, function (data) {
+            emotionChart = plotEventEmotion(data.result);
+        });
+        // hotChart = initFocus();
+        var my_demo_chart = echarts.init(document.getElementById('hot-info'));
+        my_demo_chart.showLoading({
+            text: '',
+            color: '#1983DD',
+            textColor: '#00FFFF',
+            maskColor: 'rgba(17, 84, 143, 0.3)',
+            zlevel: 0,
+        });
+        $.getJSON('/getHotEventsFromEventsTJ', {
+            areaName: "",
+            size: "8000",
+        }, function (data) {
+            hotChart = plotHotEvents(data.result, data.maxValue, my_demo_chart);
+        });
+
+    }
+    YuqingByHour();
+    setInterval(YuqingByHour, 60*60*1000);
 
     var tabToogleTimer1 = undefined;
     var tabToogleTimer2 = undefined;
@@ -1431,558 +1449,157 @@ var setInt; //工作流程图有关时间的setInterval对象
     }
 
     // 社会舆情
-    function plotHotEvents(data, dataMaxValue) {
-        var chart = echarts.init(document.getElementById('hot-info'));
+    function plotHotEvents(data, dataMaxValue, my_demo_chart) {
+    // function initFocus(){
 
-        var datelist = [];
-        var pos = [];
-        var neg = [];
-        var influence = [];
-        var maxValue = dataMaxValue;
+            var datelist = [];
+            var pos = [];
+            var neg = [];
+            var influence = [];
+            var maxValue = dataMaxValue;
 
-        $.each(data, function (i, item) {
-            datelist.push(new Date(item.time).format('yyyy-MM-dd'));
-            console.log(item)
-            console.log(item.time)
-            console.log(new Date(item.time).format('yyyy-MM-dd'))
-            pos.push(item.positive);
-            neg.push(item.negative);
-            influence.push(item.neutral);
-        })
+            $.each(data, function (i, item) {
+                datelist.push(new Date(item.time).format('yyyy-MM-dd'));
+                console.log(item)
+                console.log(item.time)
+                console.log(new Date(item.time).format('yyyy-MM-dd'))
+                pos.push(item.positive);
+                neg.push(item.negative);
+                influence.push(item.neutral);
+            })
 
-        // 指定图表的配置项和数据
-        chart.setOption({
-            // backgroundColor: 'rgba(17,47,117,.5)',
-            legend: {
-                icon: 'circle',
-                x: 'left',
-                itemWidth: 13,
-                itemHeight: 13,
-                padding: [10, 20, 10, 10],
-                left: '30%',
-                top: '5%',
-                textStyle: {
-                    color: '#fff',
-                    fontSize: 12
-                },
-                // data:['正面','负面','中性']
-            },
-            tooltip : {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#0775e4'
+            var focusOption = {
+                // backgroundColor: 'rgba(17,47,117,.5)',
+                legend: {
+                    icon: 'circle',
+                    x: 'left',
+                    itemWidth: 13,
+                    itemHeight: 13,
+                    padding: [10, 20, 10, 10],
+                    left: '30%',
+                    top: '5%',
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: 12
                     },
-                    crossStyle: {
-                        color: '#bbb'
-                    }
+                    // data:['正面','负面','中性']
                 },
-                confine: true,
-                extraCssText: 'max-width: 230px; background:rgba(17, 47, 117, 0.8); border:1px solid #0775e4',
-                formatter: '2017-{b}<br> \
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#0775e4'
+                        },
+                        crossStyle: {
+                            color: '#bbb'
+                        }
+                    },
+                    confine: true,
+                    extraCssText: 'max-width: 230px; background:rgba(17, 47, 117, 0.8); border:1px solid #0775e4',
+                    formatter: '2017-{b}<br> \
                     <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#1e98ff"> \
                     </span>{a0} : {c0}</div>',
-            },
-            grid: {
-                left: '2%',
-                right: '5%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis : [
-                {
-                    type : 'category',
-                    boundaryGap : false,
-                    data : datelist.map(stripDate),
-                    axisLabel: {
-                        textStyle: {
-                            color: '#fff',
-                            fontSize: 12
-                        },
-                        interval: 1,
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#2e63cf'
-                        }
-                    },
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            color: '#052f5d'
-                        },
-                        width: 1
-                    }
-                }
-            ],
-            yAxis : [
-                {
-                    type : 'value',
-                    max: maxValue,
-                    axisLabel: {
-                        textStyle: {
-                            color: '#fff',
-                            fontSize: 12
-                        }
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#0775e4'
-                        }
-                    },
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            color: '#052f5d'
-                        },
-                        width: 1
-                    }
                 },
-            ],
-            series : [
-                {
-                    name: '舆论',
-                    type: 'line',
-                    smooth: true,
-                    // symbol: 'circle',
-                    // showSymbol: false,
-                    lineStyle: {
-                        normal: {
-                            width: 1
-                        }
-                    },
-                    areaStyle: {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                                offset: 0,
-                                color: 'rgba(30, 152, 255, 0.9)'
-                            }, {
-                                offset: 1,
-                                color: 'rgba(30, 152, 255, 0.3)'
-                            }], false),
-                            // shadowColor: 'rgba(0, 0, 0, 0.1)',
-                            // shadowBlur: 10
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: '#1e98ff',
-                            borderColor: '#1e98ff',
-                            // borderWidth: 12
-
-                        }
-                    },
-                    data: influence
-                }/*,
-                {
-                    name: '正面',
-                    type: 'line',
-                    smooth: true,
-                    // symbol: 'circle',
-                    // showSymbol: false,
-                    lineStyle: {
-                        normal: {
-                            width: 1
-                        }
-                    },
-                    areaStyle: {
-                        normal: {
-                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                                offset: 0,
-                                color: 'rgba(255, 84, 33, 0.9)'
-                            }, {
-                                offset: 1,
-                                color: 'rgba(255, 84, 33, 0.3)'
-                            }], false),
-                            // shadowColor: 'rgba(0, 0, 0, 0.1)',
-                            // shadowBlur: 10
-                        }
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: '#FF5421',
-                            borderColor: '#FF941E',
-                        }
-                    },
-                    data: pos
+                grid: {
+                    left: '2%',
+                    right: '5%',
+                    bottom: '3%',
+                    containLabel: true
                 },
-                {
-                    name: '中性',
-                    type: 'line',
-                    lineStyle: {
-                        normal: {
-                            color: '#FFC11E',
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: datelist.map(stripDate),
+                        axisLabel: {
+                            textStyle: {
+                                color: '#fff',
+                                fontSize: 12
+                            },
+                            interval: 1,
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#2e63cf'
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: '#052f5d'
+                            },
+                            width: 1
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        max: maxValue,
+                        axisLabel: {
+                            textStyle: {
+                                color: '#fff',
+                                fontSize: 12
+                            }
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#0775e4'
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: '#052f5d'
+                            },
                             width: 1
                         }
                     },
-                    itemStyle: {
-                        normal: {
-                            color: '#FFC11E',
-                            borderColor: '#FFC11E',
-                            borderWidth: 9
-                        }
-                    },
-                    data: influence
-                }*/
-            ]
-        });
-        return chart;
-        /*var chart = echarts.init(document.getElementById('hot-info'));
+                ],
+                series: [
+                    {
+                        name: '舆论',
+                        type: 'line',
+                        smooth: true,
+                        // symbol: 'circle',
+                        // showSymbol: false,
+                        lineStyle: {
+                            normal: {
+                                width: 1
+                            }
+                        },
+                        areaStyle: {
+                            normal: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                    offset: 0,
+                                    color: 'rgba(30, 152, 255, 0.9)'
+                                }, {
+                                    offset: 1,
+                                    color: 'rgba(30, 152, 255, 0.3)'
+                                }], false),
+                                // shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                // shadowBlur: 10
+                            }
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#1e98ff',
+                                borderColor: '#1e98ff',
+                                // borderWidth: 12
 
-        function discrete(times) {
-            times.sort();
-            var a = new Date(times[0]);
-            var b = new Date(times[times.length - 1]);
-            var result = [];
-            for (var i = a; i <= b; i = new Date(i.getTime() + 24 * 60 * 60 * 1000)) {
-                result.push(i.format('yyyy-MM-dd'));
-            }
-            return result;
-        }
+                            }
+                        },
+                        data: influence
+                    }
+                ]
+            };
 
-        var eventTypes = {
-            // 0: '其他',
-            // 1: '政治',
-            // 2: '经济',
-            // 3: '市政',
-            // 4: '党建',
-            // 5: '科技',
-            // 6: '法治',
-            // 7: '民生',
-            // 8: '其他',
-            // 9: '其他',
-            // 10: '其他', // 画图时将其他事件放在最后
-            0: '政治',
-            1: '经济',
-            2: '民生',
-            3: '文化',
-            4: '科技',
+            my_demo_chart.hideLoading();
+            my_demo_chart.setOption(focusOption);
+
+            return my_demo_chart;
         };
-        // data = data.filter(function (e) { return parseInt(e.type) < 5; });
 
-        var itemsStyles = {
-            '政治': {
-                color: '#e93838',
-                borderColor: '#e93838',
-                // borderWidth: 8,
-                opacity: .8
-            },
-            '经济': {
-                color: '#7DDB61',
-                borderColor: '#7DDB61',
-                // borderWidth: 8,
-                opacity: .8
-            },
-            '民生': {
-                color: '#F2E96B',
-                borderColor: '#F2E96B',
-                // borderWidth: 8,
-                opacity: .8
-            },
-            '文化': {
-                color: '#D960C1',
-                borderColor: '#D960C1',
-                // borderWidth: 8,
-                opacity: .8
-            },
-            '科技': {
-                color: '#2680d7',
-                borderColor: '#2680D7',
-                // borderWidth: 8,
-                opacity: .8
-            },
 
-            // '法治': {
-            //     color: '#F2E96B',
-            //     borderColor: '#F2E96B',
-            //     borderWidth: 8,
-            //     opacity: .8
-            // },
-            // '市政': {
-            //     color: '#7DDB61',
-            //     borderColor: '#7DDB61',
-            //     borderWidth: 8,
-            //     opacity: .8
-            // },
-            // '其他': {
-            //     color: '#D960C1',
-            //     borderColor: '#D960C1',
-            //     borderWidth: 8,
-            //     opacity: .8
-            // },
-        }
-
-        var initdata;
-        var trenddata = {};
-        var pre = 2; //时间提前天数
-        $.each(data,function (i,d) {
-            var timearray = [];
-            var hotarray = []
-            var trendarray = (d.trend + '').split(" ");
-            for(var i = 0;i< trendarray.length;i++)
-            {
-                var timestamp =  Date.parse(d.time) +(i - pre) * 1000 * 60 * 60 *24;
-                var newDate = new Date();
-                newDate.setTime(timestamp);
-                var timestr = newDate.getFullYear() + "-" + (newDate.getMonth() + 1) + "-" + newDate.getDate();
-                timearray.push(timestr);
-                hotarray.push(parseInt(trendarray[i]));
-            }
-            var eventdata = [timearray,hotarray];
-            trenddata[d.ringId] = eventdata;
-            initdata = d;
-        })
-        var events = {};
-        var times = [];
-        $.each(data, function (idx, e) {
-            e.type = parseInt(e.type);
-            e.value = parseInt(e.hot);
-            e.time = new Date(e.time).format('yyyy-MM-dd');
-            times.push(e.time);
-        });
-        times.sort();
-        $.each(data, function (idx, e) {
-            if (!events[e.type]) {
-                events[e.type] = [];
-            }
-            events[e.type].push(e);
-        });
-        var types = [];
-        var series = [];
-        for (var t in events) {
-            var values = [];
-            for (var x in events[t]) {
-                var e = events[t][x];
-                values.push([stripDate(e.time), e.value, e.title, e.ringId, e.type, e.emotion, e.location]);
-            }
-            series.push({
-                name: getEventsTJDataType(t),
-                type: 'effectScatter',
-                showEffectOn: 'emphasis',
-                rippleEffect: {
-                    brushType: 'stroke'
-                },
-                smooth: true,
-                lineStyle: {
-                    normal: {
-                        width: 1
-                    }
-                },
-                hoverAnimation: true,
-                itemStyle: {
-                    normal: itemsStyles[getEventsTJDataType(t)],
-                    emphasis: {
-                        symbolSize: function (value, param) {
-                            return Math.max(Math.min(Math.log2((value[1] / 500)) * 6, 14) * 2, 24);
-                        }
-                    },
-                },
-                symbolSize: function (value, param) {
-                    return Math.min(Math.log2((value[1] / 500)) * 6, 14);
-                },
-                data: values,
-            });
-            types.push(getEventsTJDataType(t));
-        }
-
-        // 指定图表的配置项和数据
-        chart.setOption({
-            // backgroundColor: 'rgba(17,47,117,.5)',
-            // title: {
-            //     text: '舆论热点',
-            //     textStyle: {
-            //       color: '#fff',
-            //       fontSize: 20,
-            //       fontWeight: 'normal'
-            //     },
-            //     textAlign: 'left',
-            //     left: '36',
-            //     top: '4%',
-            // },
-            legend: {
-                icon: 'circle',
-                x: 'left',
-                itemWidth: 13,
-                itemHeight: 13,
-                padding: [10, 20, 10, 10],
-                left: '30%',
-                top: '5%',
-                textStyle: {
-                    color: '#fff',
-                    fontSize: 12
-                },
-                data: types,
-            },
-            tooltip : {
-                trigger: 'item',
-                // axisPointer: {
-                //     type: 'cross',
-                //     label: {
-                //         backgroundColor: '#0775e4'
-                //     },
-                //     crossStyle: {
-                //         color: '#bbb'
-                //     }
-                // },
-                confine: true,
-                extraCssText: 'max-width: 230px; white-space: normal; background:rgba(17, 47, 117, 0.8); border:1px solid #0775e4',
-                formatter: function (param) {
-                    var tpl =
-                        '<p> \
-                            <span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:{{typecolor}}"> \
-                            </span> \
-                            {{typestr}} \
-                        </p> \
-                        <p>热度：{{hot}}</p><p>情绪：{{emotion}}</p><p>时间：{{date}}</p><p>{{title}}</p>';
-                    return Mustache.render(tpl, {
-                        typestr: getEventsTJDataType(param.data[4]),
-                        typecolor: itemsStyles[getEventsTJDataType(param.data[4])].color,
-                        date: '2017-' + param.data[0],
-                        hot: param.data[1],
-                        title: param.data[2],
-                        emotion: param.data[5] == 0 ? '中性' : param.data[5] == 1 ? '正面' : '负面',
-                    });
-                },
-            },
-            grid: {
-                top: '28%',
-                left: '2%',
-                right: '5%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis : [
-                {
-                    type : 'category',
-                    boundaryGap : false,
-                    data : discrete(times).map(stripDate),
-                    axisLabel: {
-                        textStyle: {
-                            color: '#fff',
-                            fontSize: 12
-                        },
-                        interval: 1,
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#2e63cf'
-                        }
-                    },
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            color: '#052f5d'
-                        },
-                        width: 1
-                    }
-                }
-            ],
-            yAxis : [
-                {
-                    type : 'value',
-                    name: '热度',
-                    min: 500,
-                    axisLabel: {
-                        textStyle: {
-                            color: '#fff',
-                            fontSize: 12
-                        }
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#0775e4'
-                        }
-                    },
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            color: '#052f5d'
-                        },
-                        width: 1
-                    }
-                }
-            ],
-            series : series,
-        });
-
-        //获取es中eventstj表数据的类型
-        function getEventsTJDataType(type)
-        {
-            if(type == 1 ||  type == 16 || type ==17 ||  type ==18 || type ==19 || type ==25 )
-            {
-                return "政治";
-            }
-            else if(type == 2 ||  type == 3 || type == 5 ||  type == 6 || type == 9)
-            {
-                return "经济";
-            }
-            else if(type == 13 ||  type == 14 || type == 15 ||  type == 22)
-            {
-                return "文化";
-            }
-            else if(type == 4)
-            {
-                return "科技";
-            }
-            else if(type == 7 ||  type == 8 || type == 10 ||  type == 11 || type == 12 || type == 20 || type == 21 || type == 23 || type == 24)
-            {
-                return "民生";
-            }
-        }
-        // 轮流显示点的ToolTip。
-        var currentSeries = 0, currentIndex = 0;
-        function toogleToolTip() {
-            // 取消之前高亮的图形
-            chart.dispatchAction({
-                type: 'downplay',
-                seriesIndex: currentSeries,
-                dataIndex: currentIndex,
-            });
-            // 更新 currentSeries 和 currentIndex 的值。
-            if (currentIndex == series[currentSeries].data.length - 1) {
-                currentSeries = (currentSeries + 1) % series.length;
-                currentIndex = 0;
-            }
-            else {
-                currentIndex = (currentIndex + 1) % series[currentSeries].data.length;
-            }
-            // 高亮当前点
-            chart.dispatchAction({
-                type: 'highlight',
-                seriesIndex: currentSeries,
-                dataIndex: currentIndex,
-            });
-            // 显示 tooltip
-            chart.dispatchAction({
-                type: 'showTip',
-                seriesIndex: currentSeries,
-                dataIndex: currentIndex,
-            });
-        }
-
-        if (!ismobile) {
-            toogleToolTip();
-            var timer = setInterval(toogleToolTip, 16000);
-            $("#hot-info").hover(function () {
-                clearInterval(timer);
-                timer = undefined;
-            }, function () {
-                if (timer != undefined) {
-                    clearInterval(timer);
-                }
-                timer = setInterval(toogleToolTip, 16000);
-            });
-            $("#hot-info").bind('touchstart', function () {
-                clearInterval(timer);
-                timer = undefined;
-            }).bind('touchend', function () {
-                if (timer != undefined) {
-                    clearInterval(timer);
-                }
-                timer = setInterval(toogleToolTip, 16000);
-            });
-        }
-        return chart;*/
-    }
 }));

@@ -389,7 +389,7 @@ def getHotEventsFromEventsTJ(request):
         if maxv < valueListOne:
             maxv = valueListOne
         res.append({"negative":0,"neutral":valueListOne,"positive":0,"time":keyListOne*1000})
-    maxv = maxv + maxv/20;
+    maxv = int(maxv + maxv/20);
 
     print(res)
     print(maxv)

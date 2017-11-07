@@ -1,11 +1,15 @@
 'use strict';
 (function(){
     // 党建
-    $.getJSON('/getthreeindexs', {areaName: ''}, function (data) {
-        $('#weimin-index').html(data.all);
-        $('#dangjian-index').html(data.inprocess);
-        $('#yuqing-index').html(data.done);
-    });
+    function threeIndex(){
+        $.getJSON('/getthreeindexs', {areaName: ''}, function (data) {
+            $('#weimin-index').html(data.all);
+            $('#dangjian-index').html(data.inprocess);
+            $('#yuqing-index').html(data.done);
+        });
+    }
+    threeIndex();
+    setInterval(threeIndex, 30*1000);
     $.getJSON('/getmapdata', {areaName: ''}, function (data) {
         var chart = echarts.init(document.getElementById('map'));
         var option = {
