@@ -43,9 +43,13 @@ var setInt; //工作流程图有关时间的setInterval对象
     var dangjianChart, statChart, trendChart, emotionChart, hotChart;
 
     // 党建
-    $.getJSON('/getActiveAndCommentDegree', {areaName: ''}, function (data) {
-        dangjianChart = plotActivityTrend(data);
-    });
+    function activeTrend(){
+        $.getJSON('/getActiveAndCommentDegree', {areaName: ''}, function (data) {
+            dangjianChart = plotActivityTrend(data);
+        });
+    }
+    activeTrend();
+    setInterval(activeTrend, 60*60*1000);
 
 
     // 为民
