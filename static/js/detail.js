@@ -35,23 +35,27 @@ var setInt; //工作流程图有关时间的setInterval对象
     }
 
     // 舆情
-    $.getJSON('/getIhomeEmoSource', {
-       emoclass: 1,
-    }, function (data) {
-        innerOuterViewList("ul#happy-view-list", data.result);
-    });
+    function getdates(){
+        $.getJSON('/getIhomeEmoSource', {
+           emoclass: 1,
+        }, function (data) {
+            innerOuterViewList("ul#happy-view-list", data.result);
+        });
 
-    $.getJSON('/getIhomeEmoSource', {
-        emoclass: 2,
-    }, function (data) {
-        innerOuterViewList("ul#angry-view-list", data.result);
-    });
+        $.getJSON('/getIhomeEmoSource', {
+            emoclass: 2,
+        }, function (data) {
+            innerOuterViewList("ul#angry-view-list", data.result);
+        });
 
-    $.getJSON('/getIhomeEmoSource', {
-        emoclass: 3,
-    }, function (data) {
-        innerOuterViewList("ul#sad-view-list", data.result);
-    });
+        $.getJSON('/getIhomeEmoSource', {
+            emoclass: 3,
+        }, function (data) {
+            innerOuterViewList("ul#sad-view-list", data.result);
+        });
+    }
+    getdates();
+    setInterval(getdates, 60*60*1000)
 
     // 津内视角、津外视角
     // outerTJ: true：津外，false：津内。
