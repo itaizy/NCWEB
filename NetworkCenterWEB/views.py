@@ -296,7 +296,7 @@ def getNewsData(request):
         else:
             one['description'] = one['message']
             del one['message']
-        one['imgurl'] = "/static/images/hotnewslogo.png"
+        one['imgurl'] = "/static/images/fire.gif"
         one['src'] = 'ihome'
         one['time'] = time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(one['dateline']))
         one['eventLoc'] = '北航'
