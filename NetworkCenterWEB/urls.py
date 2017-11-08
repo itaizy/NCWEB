@@ -16,6 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from . import views
+from django.conf.urls import *
+import re
+# from django.conf import settings
+from NetworkCenterWEB import settings
+
+
+from django.views import static
+from django.conf import settings
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
@@ -33,6 +41,13 @@ urlpatterns = [
     url(r'^detail', views.detail),
     url(r'^run', views.page_not_found),
     url(r'^admin', views.page_not_found),
+    url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT }, name='static'),
 ]
 handler404 = views.page_not_found
 handler500 = views.page_error
+
+
+
+# urlpatterns = [
+#     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT }, name='static'),
+# ]
