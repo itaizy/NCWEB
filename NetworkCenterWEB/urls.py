@@ -18,7 +18,7 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # url(r'^admin/', admin.site.urls),
     url(r'^getHotMomentsFromGrid', views.getHotMomentsFromGrid, name='getHotMomentsFromGrid'),
     url(r'^getPlotMomentStatData', views.getPlotMomentStatData, name='getPlotMomentStatData'),
     url(r'^getPlotMomentTrendData', views.getPlotMomentTrendData, name='getPlotMomentTrendData'),
@@ -31,4 +31,8 @@ urlpatterns = [
     url(r'^getmapdata', views.getmapdata, name='getmapdata'),
     url(r'^$', views.ncbig),
     url(r'^detail', views.detail),
+    url(r'^run', views.page_not_found),
+    url(r'^admin', views.page_not_found),
 ]
+handler404 = views.page_not_found
+handler500 = views.page_error

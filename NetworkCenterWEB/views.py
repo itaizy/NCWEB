@@ -572,3 +572,14 @@ def getmapdata(request):
     #     ]
     # }
     return json_response(json_msg)
+
+def page_not_found(request):
+    return render_to_response('run.html')
+
+
+def page_error(request):
+    return render(request, 'run.html')
+
+
+def permission_denied(request):
+    return render(request, 'run.html')
