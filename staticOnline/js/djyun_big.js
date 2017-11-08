@@ -1185,7 +1185,7 @@ var setInt; //工作流程图有关时间的setInterval对象
         var tpl = '{{#events}} \
             <li class="item box clearfix"> \
                 <div class="item-img"> \
-                    <img width="62" height="45" src="{{imgurl}}" alt="无图片"> \
+                    <img width="62" height="50" src="{{imgurl}}" alt="无图片"> \
                 </div> \
                 <div class="item-content"> \
                     <div class="content-top "> \

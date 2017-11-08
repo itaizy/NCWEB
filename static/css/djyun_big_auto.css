@@ -539,8 +539,8 @@ body {
 }
 .view-core .view-list .item .item-img {
     float: left;
-    width: 62px;
-    height: 45px;
+    width: 45px;
+    height: 80px;
     margin-right: 8px;
 }
 .view-core .view-list .item .view-type {
