@@ -17,3 +17,7 @@ pip install -r requirements.txt
 python manage.py runserver 0.0.0.0:80 <br>
 or <br>
 python3 manage.py runserver 0.0.0.0:80 <br>
+
+
+Note:<btr>
+Now this project code in production
