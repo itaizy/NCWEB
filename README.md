@@ -2,6 +2,10 @@ ring4ihome
 ===
 升级版本，应用大屏设计风格
 
+模式
+---
+This code is in Productin, if U want to change it to in Development, Please update the parameter 'DEBUG=False' in NetworkCenter/setting.py to 'DEBUG=True'.
+
 导出依赖关系
 ---
 python3.5
