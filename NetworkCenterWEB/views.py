@@ -105,7 +105,7 @@ def getHotMomentsFromGrid(request):
     :param request:
     :return:
     '''
-
+    _update_one_week();
     querydata = IhomeComplain.objects.filter(isreply='0', addtime__gt=intTimeNowBeforeOneWeek).values("id", "message", "addtime", "expire", "atdepartment").order_by('-addtime')[0:10]
 
     #print('********************************************')
@@ -284,6 +284,7 @@ def getActiveAndCommentDegree(request):
 
 def getNewsData(request):
 
+    _update_one_week();
     querydata = IhomeDoing.objects.filter(dateline__gt=intTimeNowBeforeOneWeek).values("doid", "message", "dateline", "fromdevice").order_by('-replynum')[0:10]
 
     #print('********************************************')
