@@ -87,6 +87,9 @@ def detail(request):
     '''
     return render_to_response('detail.html')
 
+def flappybirds(request):
+    return render_to_response('flappybirds.html')
+
 def _deleteAt(str):
     str = str.replace('&nbsp;','')
     if '</a>' in str and '<a' in str:

@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^getmapdata', views.getmapdata, name='getmapdata'),
     url(r'^$', views.ncbig),
     url(r'^detail', views.detail),
+    url(r'^game', views.flappybirds),
     url(r'^run', views.page_not_found),
     url(r'^admin', views.page_not_found),
     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT }, name='static'),

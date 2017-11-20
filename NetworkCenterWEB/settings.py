@@ -157,6 +157,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+# python manage.py collectstatic
 STATIC_ROOT = os.path.join(BASE_DIR, "staticOnline")
 
 # 上传图片
