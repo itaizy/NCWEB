@@ -45,7 +45,8 @@ urlpatterns = [
     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT }, name='static'),
 ]
 handler404 = views.page_not_found
-handler500 = views.page_error
+# handler500 = views.page_error
+handler500 = views.page_not_found
 
 
 

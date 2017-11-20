@@ -41,11 +41,11 @@ FlappyBird.prototype = {
 	mapHeight: 453, // 画布高度
 	startX: 90, // 起始位置  
 	startY: 225,
-	obsDistance: 100, // 上下障碍物距离  
-	obsSpeed: 2, // 障碍物移动速度  
+	obsDistance: 150, // 上下障碍物距离
+	obsSpeed: 1, // 障碍物移动速度
 	obsInterval: 2000, // 制造障碍物间隔ms  
 	upSpeed: 8, // 上升速度  
-	downSpeed: 3, // 下降速度  
+	downSpeed: 2, // 下降速度
 	line: 56, // 地面高度
 	score: 0, // 得分  
 	touch: false, // 是否触摸
@@ -53,9 +53,9 @@ FlappyBird.prototype = {
 	CreateMap: function() {
 		//背景
 		this.bg = new Image();
-		this.bg.src = "../images/bg.png";
+		this.bg.src = "/static/images/bg.png";
 		var startBg = new Image();
-		startBg.src = "../images/start.jpg";
+		startBg.src = "/static/images/start.jpg";
 		// 由于Image异步加载, 在加载完成时在绘制图像
 		startBg.onload = function(){
 			c.drawImage(startBg, 0, 0);
@@ -63,7 +63,7 @@ FlappyBird.prototype = {
 
 		//小鸟
 		var image = new Image();
-		image.src = "../images/bird.png";
+		image.src = "/static/images/bird.png";
 		image.onload = function(){
 			this.bird = new Bird(this.startX, this.startY, image);
 			//this.bird.draw(c, "down");
@@ -71,7 +71,7 @@ FlappyBird.prototype = {
 
 		//障碍物  
 		this.obs = new Image();
-		this.obs.src = "../images/obs.png";
+		this.obs.src = "/static/images/obs.png";
 		this.obs.onload = function() {
 			var h = 100; // 默认第一障碍物上管道高度为100
 			var h2 = this.mapHeight - h - this.obsDistance;
@@ -160,7 +160,7 @@ FlappyBird.prototype = {
 	},
 	ShowOver: function() {
 		var overImg = new Image();
-		overImg.src = "img/over.png";
+		overImg.src = "/static/images/over.png";
 		overImg.onload = function(){
 			c.drawImage(overImg, (this.mapWidth - overImg.width) / 2, (this.mapHeight - overImg.height) / 2 - 50);
 		}.bind(this);
@@ -169,7 +169,7 @@ FlappyBird.prototype = {
 };
 
 var game = new FlappyBird();
-var Speed = 20;
+var Speed = 10;
 var IsPlay = false;
 var GameTime = null;
 var btn_start;
