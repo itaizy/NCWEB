@@ -44,9 +44,11 @@ intTimeNowBeforeOneWeek = int(time.time()) - intPeriod*60*60*24;
 intTimeNowBeforeO2Week = int(time.time()) - intPeriod2*60*60*24;
 
 def _update_one_week():
+    global intTimeNowBeforeOneWeek
     intTimeNowBeforeOneWeek = int(time.time()) - intPeriod*60*60*24;
 
 def _update_two_week():
+    global intTimeNowBeforeO2Week
     intTimeNowBeforeO2Week = int(time.time()) - intPeriod2*60*60*24;
 
 
@@ -288,6 +290,7 @@ def getActiveAndCommentDegree(request):
 def getNewsData(request):
 
     _update_one_week();
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@' + str(intTimeNowBeforeOneWeek))
     querydata = IhomeDoing.objects.filter(dateline__gt=intTimeNowBeforeOneWeek).values("doid", "message", "dateline", "fromdevice").order_by('-replynum')[0:10]
 
     #print('********************************************')

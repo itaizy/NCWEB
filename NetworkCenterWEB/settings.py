@@ -110,9 +110,9 @@ DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'ihome',
-#         'USER': 'ihome',
-#         'PASSWORD': '123456789',
-#         'HOST': '192.168.99.207',
+#         'USER': 'ringimoodles',
+#         'PASSWORD': '',
+#         'HOST': '10.254.20.198',
 #         'PORT': '3306',
 #     }
 # }
